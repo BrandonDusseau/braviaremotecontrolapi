@@ -1,0 +1,9 @@
+version: "3"
+services:
+  tvapi:
+    build: .
+    ports:
+      - 5000:5000
+    restart: always
+    env_file:
+      - environment.env
