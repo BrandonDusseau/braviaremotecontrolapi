@@ -175,7 +175,10 @@ def get_app():
     except ApiError as ex:
         return __error(str(ex), 500)
 
-    app_names = [app_info.get("name") for app_info in app_list]
+    if app_list is not None:
+        app_names = [app_info.get("name") for app_info in app_list]
+    else:
+        app_names = []
 
     response = __success()
     response["apps"] = app_names
@@ -223,7 +226,7 @@ def playback(action):
     return __success()
 
 
-@app.route("/input/<input>/", methods=["POST"])
+@app.route("/input/set/<input>/", methods=["POST"])
 @require_appkey
 def input_set(input):
     try:
@@ -277,6 +280,27 @@ def get_input():
 
     response = __success()
     response["input_name"] = current_input.get("name")
+    return response
+
+
+@app.route("/input/all/", methods=["GET"])
+@require_appkey
+def get_all_inputs():
+    try:
+        inputs = bravia.avcontent.get_external_input_status()
+    except ApiError as ex:
+        return __error(str(ex), 500)
+
+    input_list = []
+    if inputs is not None:
+        for input in inputs:
+            input_list.append({
+                "name": input.get("name"),
+                "custom_label": input.get("custom_label")
+            })
+
+    response = __success()
+    response["inputs"] = input_list
     return response
 
 
