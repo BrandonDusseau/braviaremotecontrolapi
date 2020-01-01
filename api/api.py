@@ -5,6 +5,7 @@ from flask import Flask, request, abort
 from functools import wraps
 from fuzzywuzzy import fuzz
 import os
+import re
 
 app = Flask(__name__)
 auth_key = os.environ.get("BRAVIA_API_KEY")
@@ -308,40 +309,110 @@ def get_all_inputs():
 @require_appkey
 def get_channels():
     try:
+        channels = __get_tv_channels()
+    except ApiError as ex:
+        return __error(str(ex), 500)
+
+    output_channels = []
+    for channel in channels:
+        channel_info = channel.get("channel_info")
+        if channel_info is not None:
+            channel_number = channel_info.get("channel_full")
+            channel_visible = channel_info.get("visible", False)
+
+        if not channel_visible:
+            continue
+
+        output_channels.append({
+            "channel_number": channel_number,
+            "type": channel.get("type"),
+            "name": channel.get("name")
+        })
+
+    response = __success()
+    response["channels"] = output_channels
+    return response
+
+
+@app.route("/channel/number/<input>/", methods=["POST"])
+@require_appkey
+def set_channel_by_number(input):
+    channel_input = re.fullmatch(r"^(?P<main>\d+)([.-](?P<sub>\d+))?$", input)
+    if channel_input is None:
+        return __error("Channel number must be in numeric format 'X' or 'X.Y' or 'X-Y'", 400)
+    selected_main = channel_input.group('main')
+    try:
+        selected_sub = channel_input.group('sub')
+    except IndexError:
+        selected_sub = None
+
+    try:
+        matching_channel = __locate_matching_channel_by_number(selected_main, selected_sub)
+    except ApiError as ex:
+        return __error(str(ex), 500)
+
+    if matching_channel is None:
+        return __error("The selected channel is not available", 404)
+
+    channel_uri = matching_channel.get("uri")
+    if channel_uri is None:
+        return __error("A channel was found but was invalid", 500)
+
+    try:
+        bravia.avcontent.set_play_content(channel_uri)
+    except ApiError as ex:
+        return __error(str(ex), 500)
+
+    response = __success()
+    matching_channel_info = matching_channel.get("channel_info", {})
+    response["channel"] = matching_channel_info.get("channel_full")
+    response["type"] = matching_channel.get("type")
+    return response
+
+
+def __locate_matching_channel_by_number(selected_main, selected_sub):
+    exclude_analog = selected_sub is not None
+
+    channels = __get_tv_channels(exclude_analog)
+
+    matching_analog = None
+    matching_digital = None
+    for channel in channels:
+        channel_info = channel.get("channel_info", {})
+        channel_main = channel_info.get("channel_main")
+        channel_sub = channel_info.get("channel_sub")
+        channel_visible = channel_info.get("visible", False)
+
+        if not channel_visible:
+            continue
+
+        if channel["type"] == "analog" and channel_main == selected_main and selected_sub is None:
+            matching_analog = channel
+        elif channel["type"] == "digital" and channel_main == selected_main:
+            if ((selected_sub is None and channel_sub == "1")
+                    or (selected_sub is not None and channel_sub == selected_sub)):
+                matching_digital = channel
+
+    return matching_analog or matching_digital
+
+
+def __get_tv_channels(exclude_analog=False):
+    if not exclude_analog:
         analog_channels = bravia.avcontent.get_content_list("tv:analog")
         if analog_channels is None:
             analog_channels = []
         for channel in analog_channels:
             channel.update({"type": "analog"})
+    else:
+        analog_channels = []
 
-        digital_channels = bravia.avcontent.get_content_list("tv:atsct")
-        if digital_channels is None:
-            digital_channels = []
-        for channel in digital_channels:
-            channel.update({"type": "digital"})
-    except ApiError as ex:
-        return __error(str(ex), 500)
+    digital_channels = bravia.avcontent.get_content_list("tv:atsct")
+    if digital_channels is None:
+        digital_channels = []
+    for channel in digital_channels:
+        channel.update({"type": "digital"})
 
-    output_channels = []
-    channels = analog_channels + digital_channels
-    if channels is not None:
-        for channel in channels:
-            channel_info = channel.get("channel_info")
-            channel_number = channel_info.get("channel_full") if channel_info is not None else None
-            channel_visible = channel_info.get("visible") if channel_info is not None else False
-
-            if not channel_visible:
-                continue
-
-            output_channels.append({
-                "channel_number": channel_number,
-                "type": channel.get("type"),
-                "name": channel.get("name")
-            })
-
-    response = __success()
-    response["channels"] = output_channels
-    return response
+    return analog_channels + digital_channels
 
 
 def __success():
