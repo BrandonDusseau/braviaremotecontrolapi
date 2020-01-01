@@ -304,6 +304,46 @@ def get_all_inputs():
     return response
 
 
+@app.route("/channel/", methods=["GET"])
+@require_appkey
+def get_channels():
+    try:
+        analog_channels = bravia.avcontent.get_content_list("tv:analog")
+        if analog_channels is None:
+            analog_channels = []
+        for channel in analog_channels:
+            channel.update({"type": "analog"})
+
+        digital_channels = bravia.avcontent.get_content_list("tv:atsct")
+        if digital_channels is None:
+            digital_channels = []
+        for channel in digital_channels:
+            channel.update({"type": "digital"})
+    except ApiError as ex:
+        return __error(str(ex), 500)
+
+    output_channels = []
+    channels = analog_channels + digital_channels
+    if channels is not None:
+        for channel in channels:
+            channel_info = channel.get("channel_info")
+            channel_number = channel_info.get("channel_full") if channel_info is not None else None
+            channel_visible = channel_info.get("visible") if channel_info is not None else False
+
+            if not channel_visible:
+                continue
+
+            output_channels.append({
+                "channel_number": channel_number,
+                "type": channel.get("type"),
+                "name": channel.get("name")
+            })
+
+    response = __success()
+    response["channels"] = output_channels
+    return response
+
+
 def __success():
     return {"status": "ok"}
 
