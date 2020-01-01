@@ -152,6 +152,33 @@ Controls external input sources on the device
   }
   ```
 
+### Channel endpoints
+
+Controls TV channels on the device. These endpoints only support analog and ATSC digital channels.
+
+* **POST /channel/number/\<number\>/** - Switches to the channel number specified in `<number>`. Returns the channel found. The number may be in format `X`, `X.Y`, or `X-Y`. If no subchannel is specified, a matching analog channel will be preferred over a matching digital channel.
+  * `{"status": "ok", "channel": "7.1", "name": "WXYZ-HD", "type": "digital"}` (HTTP 200)
+  * `{"status": "error", "error": "The selected channel is not available"}` (HTTP 404)
+  * `{"status": "error", "error": ""Channel number must be in numeric format 'X' or 'X.Y' or 'X-Y'""}` (HTTP 400)
+
+* **POST /channel/name/\<name\>/** - Switches to the channel with a name most closely matching `<name>` (uses fuzzy search). Returns the channel found.
+  * `{"status": "ok", "channel": "7.1", "name": "WXYZ-HD", "type": "digital"}` (HTTP 200)
+  * `{"status": "error", "error": "Could not locate a matching channel"}` (HTTP 404)
+  * `{"status": "error", "error": ""Channel number must be in numeric format 'X' or 'X.Y' or 'X-Y'""}` (HTTP 400)
+
+* **GET /channel/** - Returns all available channels. The `type` field can be either `digital` or `analog`. Analog channels do not have a `name`.
+  * Example response:
+  ```
+  {
+      "status": "ok",
+      "channels": [
+          {"channel": "7.1", "name": "WXYZ-HD", "type": "digital"},
+          {"channel": "7.2", "name": "WXYZ-BN", "type": "digital"},
+          {"channel": "9", "name": None, "type": "analog"}
+      ]
+  }
+  ```
+
 ### Navigation endpoints
 
 Controls navigation, like a remote control.

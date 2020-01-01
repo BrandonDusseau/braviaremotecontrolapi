@@ -324,7 +324,7 @@ def get_channels():
             continue
 
         output_channels.append({
-            "channel_number": channel_number,
+            "channel": channel_number,
             "type": channel.get("type"),
             "name": channel.get("name")
         })
