@@ -366,6 +366,50 @@ def set_channel_by_number(input):
     response = __success()
     matching_channel_info = matching_channel.get("channel_info", {})
     response["channel"] = matching_channel_info.get("channel_full")
+    response["name"] = matching_channel.get("name")
+    response["type"] = matching_channel.get("type")
+    return response
+
+
+@app.route("/channel/name/<channel_name>", methods=["POST"])
+@require_appkey
+def set_channel_by_name(channel_name):
+    try:
+        # Analog channels do not have names, so we'll save some time here.
+        channels = __get_tv_channels(exclude_analog=True)
+    except ApiError as ex:
+        return __error(str(ex), 500)
+
+    best_match_ratio = 0
+    matching_channel = None
+    for channel in channels:
+        channel_info = channel.get("channel_info", {})
+        channel_visible = channel_info.get("visible", False)
+
+        if not channel_visible:
+            continue
+
+        ratio = fuzz.ratio(channel_name.lower(), channel.get("name").lower())
+        if ratio > 50 and ratio > best_match_ratio:
+            best_match_ratio = ratio
+            matching_channel = channel
+
+    if matching_channel is None:
+        return __error("Could not locate a matching channel", 404)
+
+    channel_uri = matching_channel.get("uri")
+    if channel_uri is None:
+        return __error("A channel was found but was invalid", 500)
+
+    try:
+        bravia.avcontent.set_play_content(channel_uri)
+    except ApiError as ex:
+        return __error(str(ex), 500)
+
+    response = __success()
+    matching_channel_info = matching_channel.get("channel_info", {})
+    response["channel"] = matching_channel_info.get("channel_full")
+    response["name"] = matching_channel.get("name")
     response["type"] = matching_channel.get("type")
     return response
 
