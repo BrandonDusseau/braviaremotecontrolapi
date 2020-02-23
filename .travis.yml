@@ -1,0 +1,27 @@
+language: python
+python: 3.6
+os: linux
+jobs:
+  include:
+  - stage: Deploy to GitHub
+    if: tag IS present
+    name: Deploy
+    before_deploy:
+    - export CLEAN_VERSION=${TRAVIS_TAG//v/}
+    - sed -i.bak "s/__APPVERSION__/$CLEAN_VERSION/" src/*.py
+    - export ZIP_FILENAME="braviaremotecontrolapi-${TRAVIS_TAG}"
+    - mkdir $ZIP_FILENAME
+    - cp README.md LICENSE $ZIP_FILENAME
+    - cp -r src/* $ZIP_FILENAME
+    - zip -qr ${ZIP_FILENAME}.zip $ZIP_FILENAME
+    deploy:
+      provider: releases
+      api_key:
+        secure: aw9RIW33SZvJLViodCxwKnqRS21I3egdGmgb/yRmAwuOnxqi6SxaMhHVQ4a93zoNIvr1qNNriALq6WGezbUqiBlW1DfhlVQCDuST7FANkS3OfW+eeVf9VcFlWmUYSnKa0ob1dy1qrsGvubl33enFI4vO81UaPcKvbQ6vHOd7Kvu8Wlz/8F3HjoJEZLNDUM6+jfD0/JoLjMjMgZ6es7ZzKOQXGjoxaaxAeNwu0wncKREvFti1fNWNKcNjCmjaK7jmgliT833l5hQisgJF2tu0eR7r8xkuM04AHqevYZf9qjUefY3bJA63Y4YIS9JcUZ4Ih6VyIeZj6OrglhO+nYhFHdYAue/UGd9Ep3LG6vUQGhk2y8e8ijXac3UNJIU4ZUnceTWLGjiwRDsQ0isvCVYOO9HnYFKQJTzhij/V8jg8ZUfMlHmbJys7io6J5vzhkufzcOfZFzZ4LRlJ95E8C3CUmqB0hWFxS3KzNqu9imP40NaA0K8rPIckDC0u64tr72+BUqwoWqGtTAfCwDj0/+UYmKcj0dK6TSHSnNVsN91T+vNKZa2KyXChHfbAgyEPDMFLirFMnwdxQwkAgU+yIfNhAYTjKDouZMCDnhRbJg3n9FwlH2b/iSWycmoxSgKwPe5NhyAwn/1wo/Cb9FeXqtpjxFAdD+Qe2hYHlWcL0+8ug2E=
+      file: "${ZIP_FILENAME}.zip"
+      name: "$TRAVIS_TAG"
+      skip_cleanup: true
+      draft: true
+      overwrite: true
+      on:
+        tags: true

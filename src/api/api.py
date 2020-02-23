@@ -9,6 +9,7 @@ import re
 app = Flask(__name__)
 auth_key = None
 bravia = None
+app_version = "__APPVERSION__"
 
 def init(auth, host, psk):
     if auth is None or type(auth) is not str:
@@ -42,6 +43,14 @@ def require_appkey(view_function):
         else:
             abort(401)
     return decorated_function
+
+
+@app.route("/status/", methods=["GET"])
+@require_appkey
+def status():
+    result = __success()
+    result["version"] = __get_version()
+    return result
 
 
 @app.route("/power/<status>/", methods=["POST"])
@@ -456,6 +465,11 @@ def __get_tv_channels(exclude_analog=False):
         channel.update({"type": "digital"})
 
     return analog_channels + digital_channels
+
+
+def __get_version():
+    version = "dev" if app_version == "__APPVERSION__" else app_version
+    return version
 
 
 def __success():

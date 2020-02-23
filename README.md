@@ -18,7 +18,7 @@ do not natively support it, or as part of a custom home automation setup.
 Your television must have a pre-shared key enabled to access its API. [Find the instructions and observe the warning here.](https://braviaproapi.readthedocs.io/en/latest/gettingstarted.html#configuring-your-television)
 
 ### 2. Download the application
-Download the latest release or current source from this repository and extract it to your server computer.
+Download the latest release or current source from this repository and extract it to your server computer. If running from source, you will only need the contents of the `src` directory.
 
 ### 3. Edit the API configuration
 Rename `sample.env` to `.env`. Set up the following options (**DO NOT use quotes!**):
@@ -92,6 +92,13 @@ Sample error response:
 ```json
 {"status": "error", "error": "Invalid power status specified, must be 'on' or 'off'"}
 ```
+
+### General Endpoints
+
+Gets information about the API
+
+* **GET /status/** - Returns the API version currently running.
+  * `{"status": "ok", "version": "1.0.0"}` (HTTP 200)
 
 ### Power endpoints
 
