@@ -468,7 +468,7 @@ def __get_tv_channels(exclude_analog=False):
 
 
 def __get_version():
-    version = "dev" if app_version == "__APPVERSION__" else app_version
+    version = "dev" if "APPVERSION" in app_version else app_version
     return version
 
 
