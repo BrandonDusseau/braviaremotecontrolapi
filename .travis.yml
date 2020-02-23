@@ -9,8 +9,8 @@ jobs:
     name: Deploy
     before_deploy:
     - export CLEAN_VERSION=${TRAVIS_TAG//v/}
-    - sed -i.bak "s/__APPVERSION__/$CLEAN_VERSION/" src/*.py
-    - rm src/*.bak
+    - sed -i.bak "s/__APPVERSION__/$CLEAN_VERSION/" src/api/*.py
+    - rm src/api/*.bak
     - export ZIP_FILENAME="braviaremotecontrolapi-${TRAVIS_TAG}"
     - mkdir $ZIP_FILENAME
     - cp README.md LICENSE $ZIP_FILENAME
