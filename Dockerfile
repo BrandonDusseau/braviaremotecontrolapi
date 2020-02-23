@@ -14,4 +14,4 @@ RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY . .
 
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "-w", "1", "wsgi:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "-w", "1", "--preload", "wsgi:app"]

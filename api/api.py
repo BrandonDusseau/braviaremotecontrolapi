@@ -29,6 +29,7 @@ def init(auth, host, psk):
               "Set the BRAVIA_DEVICE_PASSCODE environment variable and try again.")
         exit(4)
 
+    global auth_key, bravia
     auth_key = auth
     bravia = BraviaClient(host, psk)
 

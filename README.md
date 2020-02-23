@@ -65,7 +65,7 @@ before running again.
   ```
   2. Run the server:
   ```bash
-  pipenv run gunicorn -b 0.0.0.0:5000 -w 1 wsgi:app
+  pipenv run gunicorn -b 0.0.0.0:5000 -w 1 --preload wsgi:app
   ```
 
 ## API Documentation
