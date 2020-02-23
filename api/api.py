@@ -31,7 +31,6 @@ def init(auth, host, psk):
 
     auth_key = auth
     bravia = BraviaClient(host, psk)
-    app.run()
 
 
 def require_appkey(view_function):
