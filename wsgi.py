@@ -1,5 +1,5 @@
 import os
-from api import init
+from api import init, app
 
 if __name__ == "__main__":
     auth_key = os.environ.get("BRAVIA_API_KEY")
