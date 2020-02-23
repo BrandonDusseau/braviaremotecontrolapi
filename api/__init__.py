@@ -1,3 +1,3 @@
-from .api import app
+from .api import init
 
-__all__ = ('app')
+__all__ = ('init')

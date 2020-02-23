@@ -6,7 +6,7 @@ do not natively support it, or as part of a custom home automation setup.
 
 ## Requirements
 
- * An always-on computer capable of running Python 3.7 or Docker (with docker-compose)
+ * An always-on computer capable of running Python 3.6 or Docker (with docker-compose)
  * Knowledge of using Docker _OR_ comfort with the command-line.
  * A configured web server such as nginx that supports reverse proxy
  * Optionally, a knowledge of setting up SSL certificates
@@ -21,7 +21,7 @@ Your television must have a pre-shared key enabled to access its API. [Find the 
 Download the latest release or current source from this repository and extract it to your server computer.
 
 ### 3. Edit the API configuration
-Rename `environment.sample.env` to `environment.env`. Set up the following options (DO NOT use quotes!):
+Rename `environment.sample.env` to `environment.env`. Set up the following options (**DO NOT use quotes!**):
 
  * `BRAVIA_API_KEY` - The passphrase used to access your API. Must be at least 32 characters and cannot contain spaces.
  * `BRAVIA_DEVICE_HOST` - The IP address or hostname of your TV.
@@ -63,7 +63,7 @@ before running again.
   pip install pipenv
   pipenv install
   ```
-  2. Import the Run the server:
+  2. Run the server:
   ```bash
   pipenv shell
   source environment.env

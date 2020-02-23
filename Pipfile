@@ -13,4 +13,4 @@ python-levenshtein = "*"
 gunicorn = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6"

@@ -4,35 +4,34 @@ from braviaproapi.bravia.errors import ApiError, AppLaunchError
 from flask import Flask, request, abort
 from functools import wraps
 from fuzzywuzzy import fuzz
-import os
 import re
 
 app = Flask(__name__)
-auth_key = os.environ.get("BRAVIA_API_KEY")
+auth_key = None
+bravia = None
 
-if auth_key is None or type(auth_key) is not str:
-    print("The API key is not set. Set the BRAVIA_API_KEY environment variable and try again.")
-    exit(4)
+def init(auth, host, psk):
+    if auth is None or type(auth) is not str:
+        print("The API key is not set. Set the BRAVIA_API_KEY environment variable and try again.")
+        exit(4)
 
-if len(auth_key) < 32:
-    print("The API key must be at least 32 characters to start the API.")
-    exit(4)
+    if len(auth) < 32:
+        print("The API key must be at least 32 characters to start the API.")
+        exit(4)
 
+    if host is None:
+        print("The hostname of the target television is not set.\n"
+              "Set the BRAVIA_DEVICE_HOST environment variable and try again.")
+        exit(4)
 
-tv_host = os.environ.get("BRAVIA_DEVICE_HOST")
-tv_psk = os.environ.get("BRAVIA_DEVICE_PASSCODE")
+    if psk is None:
+        print("The pre-shared key of the target television is not set.\n"
+              "Set the BRAVIA_DEVICE_PASSCODE environment variable and try again.")
+        exit(4)
 
-if tv_host is None:
-    print("The hostname of the target television is not set.\n"
-          "Set the BRAVIA_DEVICE_HOST environment variable and try again.")
-    exit(4)
-
-if tv_host is None:
-    print("The pre-shared key of the target television is not set.\n"
-          "Set the BRAVIA_DEVICE_PASSCODE environment variable and try again.")
-    exit(4)
-
-bravia = BraviaClient(tv_host, tv_psk)
+    auth_key = auth
+    bravia = BraviaClient(host, psk)
+    app.run()
 
 
 def require_appkey(view_function):
