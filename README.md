@@ -21,7 +21,7 @@ Your television must have a pre-shared key enabled to access its API. [Find the 
 Download the latest release or current source from this repository and extract it to your server computer.
 
 ### 3. Edit the API configuration
-Rename `environment.sample.env` to `environment.env`. Set up the following options (**DO NOT use quotes!**):
+Rename `sample.env` to `.env`. Set up the following options (**DO NOT use quotes!**):
 
  * `BRAVIA_API_KEY` - The passphrase used to access your API. Must be at least 32 characters and cannot contain spaces.
  * `BRAVIA_DEVICE_HOST` - The IP address or hostname of your TV.
@@ -65,9 +65,7 @@ before running again.
   ```
   2. Run the server:
   ```bash
-  pipenv shell
-  source environment.env
-  gunicorn -b 0.0.0.0:5000 -w 1 wsgi:app
+  pipenv run gunicorn -b 0.0.0.0:5000 -w 1 wsgi:app
   ```
 
 ## API Documentation
