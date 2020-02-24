@@ -6,11 +6,11 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-flask = "*"
-braviaproapi = "*"
-fuzzywuzzy = "*"
-python-levenshtein = "*"
-gunicorn = "*"
+flask = ">=1,<2"
+braviaproapi = "<2"
+fuzzywuzzy = "<1"
+python-levenshtein = "<1"
+gunicorn = ">=20,<21"
 
 [requires]
 python_version = "3.6"
