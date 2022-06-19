@@ -11,10 +11,10 @@ jobs:
         python-version: ['3.6', '3.7', '3.8']
     steps:
       - uses: actions/checkout@v3
+      - run: pipx install pipenv pycodestyle
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pipenv'
-      - run: |
-          pip install pycodestyle
+      - run: pipenv install
       - run: pycodestyle .
