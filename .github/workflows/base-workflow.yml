@@ -1,0 +1,21 @@
+name: base-workflow
+on: workflow_call
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8']
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      - run: |
+          pip install pycodestyle pipenv
+          pipenv install --system --deploy --ignore-pipfile
+      - run: pycodestyle .

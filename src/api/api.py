@@ -11,6 +11,7 @@ auth_key = None
 bravia = None
 app_version = "__APPVERSION__"
 
+
 def init(auth, host, psk):
     if auth is None or type(auth) is not str:
         print("The API key is not set. Set the BRAVIA_API_KEY environment variable and try again.")

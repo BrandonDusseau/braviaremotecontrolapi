@@ -1,0 +1,5 @@
+name: build
+on: [push, create]
+jobs:
+  call-base-workflow:
+    uses: ./.github/workflows/base-workflow.yml
