@@ -6,7 +6,7 @@ do not natively support it, or as part of a custom home automation setup.
 
 ## Requirements
 
- * An always-on computer capable of running Python 3.6 or Docker (with docker-compose)
+ * An always-on computer capable of running Python 3.7 or Docker (with docker-compose)
  * Knowledge of using Docker _OR_ comfort with the command-line.
  * A configured web server such as nginx that supports reverse proxy
  * Optionally, a knowledge of setting up SSL certificates
