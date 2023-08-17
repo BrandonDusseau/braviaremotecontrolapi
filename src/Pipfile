@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-flask = ">=1,<2"
+flask = ">=1,<3"
 braviaproapi = "<2"
 fuzzywuzzy = "<1"
 python-levenshtein = "<1"
