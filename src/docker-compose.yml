@@ -3,7 +3,7 @@ services:
   tvapi:
     build: .
     ports:
-      - 5000:5000
+      - 5060:5000
     restart: always
     env_file:
       - .env
