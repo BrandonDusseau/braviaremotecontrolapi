@@ -8,7 +8,7 @@ jobs:
     needs: call-base-workflow
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           CLEAN_VERSION=${GITHUB_REF//refs\/tags\/v/}
           sed -i.bak "s/__APPVERSION__/$CLEAN_VERSION/" src/api/*.py
@@ -17,7 +17,7 @@ jobs:
           cp README.md LICENSE dist/
           mv src/* dist
           zip -qr dist.zip dist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: publish-artifact
           path: |
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: create-artifact
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: publish-artifact
       - run: |
