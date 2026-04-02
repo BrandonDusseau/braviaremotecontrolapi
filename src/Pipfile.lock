@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d35142fd08e378d23d20b54217a864c07d49e09641336cf88df2fde9e193b3ee"
+            "sha256": "a76f531be54ace781b83c9d4c4aa839f701e9e1e26e186e03cd3906b8fa842ad"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -185,12 +185,12 @@
         },
         "flask": {
             "hashes": [
-                "sha256:bf656c15c80190ed628ad08cdfd3aaa35beb087855e2f494910aa3774cc4fd87",
-                "sha256:ca1d8112ec8a6158cc29ea4858963350011b5c846a414cdb7a954aa9e967d03c"
+                "sha256:0ef0e52b8a9cd932855379197dd8f94047b359ca0a78695144304cb45f87c9eb",
+                "sha256:f4bcbefc124291925f1a26446da31a5178f9483862233b23c0c96a20701f670c"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==3.1.2"
+            "version": "==3.1.3"
         },
         "fuzzywuzzy": {
             "hashes": [
@@ -202,12 +202,12 @@
         },
         "gunicorn": {
             "hashes": [
-                "sha256:350679f91b24062c86e386e198a15438d53a7a8207235a78ba1b53df4c4378d9",
-                "sha256:4a0b436239ff76fb33f11c07a16482c521a7e09c1ce3cc293c2330afe01bec63"
+                "sha256:cacea387dab08cd6776501621c295a904fe8e3b7aae9a1a3cbb26f4e7ed54660",
+                "sha256:f74e1b2f9f76f6cd1ca01198968bd2dd65830edc24b6e8e4d78de8320e2fe889"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==22.0.0"
+            "markers": "python_version >= '3.10'",
+            "version": "==25.3.0"
         },
         "idna": {
             "hashes": [
@@ -604,11 +604,11 @@
         },
         "werkzeug": {
             "hashes": [
-                "sha256:5111e36e91086ece91f93268bb39b4a35c1e6f1feac762c9c822ded0a4e322dc",
-                "sha256:6a548b0e88955dd07ccb25539d7d0cc97417ee9e179677d22c7041c8f078ce67"
+                "sha256:4b314d81163a3e1a169b6a0be2a000a0e204e8873c5de6586f453c55688d422f",
+                "sha256:fb8c01fe6ab13b9b7cdb46892b99b1d66754e1d7ab8e542e865ec13f526b5351"
             ],
             "markers": "python_version >= '3.9'",
-            "version": "==3.1.5"
+            "version": "==3.1.7"
         }
     },
     "develop": {}
